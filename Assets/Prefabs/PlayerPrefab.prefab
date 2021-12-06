@@ -98,9 +98,9 @@ MonoBehaviour:
   DestroyWhenStateAuthorityLeaves: 0
   AllowStateAuthorityOverride: 0
   AoiPosition: {fileID: 0}
-  Flags: 2561
+  Flags: 2305
   NetworkGuid:
-    RawGuidValue: 61dfccc10ab94397b65445e949256e2b
+    RawGuidValue: ad38d2900b54c7e498a31c020e98b668
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 3356864704645261596}
@@ -171,6 +171,8 @@ MonoBehaviour:
   JumpForce: 2.5
   _prefabBall: {fileID: 7532498779934406039, guid: fd1d314acf7ef2e448f5bae476638297, type: 3}
   _prefabPhysxBall: {fileID: 8927873016123725431, guid: e673932f6b45bc74e8e6dd37dccec113, type: 3}
+  _spawned:
+    _value: 0
 --- !u!114 &8759160577431865119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   Animator: {fileID: 8406894696470396863}
-  SyncSettings: 77
+  SyncSettings: 73
   FloatAccuracy:
     _value: 0.001
     _inverse: 999.99994
@@ -198,7 +200,7 @@ MonoBehaviour:
     _value: 0.001
     _inverse: 999.99994
     _hash: -814817977
-  StateHashes: 00000000325a7083e3b73c7e
+  StateHashes: 0000000095b8e3cb09cf97bce5b951d641c14bf557001185de7d8954
   TriggerHashes: 00000000
 --- !u!1 &8406894696477674497
 GameObject:
@@ -1896,7 +1898,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8406894696477839397}
   - component: {fileID: 8406894696470396863}
-  - component: {fileID: 2247325137937967617}
   m_Layer: 0
   m_Name: WM_Master_Unity
   m_TagString: Untagged
@@ -1929,7 +1930,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8406894696477674951}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: c0c5dd0275493e44d9ef7418695dd3cd, type: 3}
   m_Controller: {fileID: 9100000, guid: 40cbebc672bfbb241b6b983161f74df4, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -1939,20 +1940,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2247325137937967617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8406894696477674951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7f21327e7ac93f4d91dc319fda60661, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 8406894696470396863}
-  _player: {fileID: 7870212103162751474}
 --- !u!1 &8406894696477674953
 GameObject:
   m_ObjectHideFlags: 0
