@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
@@ -23,23 +24,13 @@ namespace root {
 		[Networked] private TickTimer delay { get; set; }
 		[Networked(OnChanged = nameof(OnBallSpawned))]
 		public NetworkBool spawned { get; set; }
-		private Material _material;
-		Material material
-		{
-			get
-			{
-				if(_material==null)
-					_material = GetComponentInChildren<MeshRenderer>().material;
-				return _material;
-			}
-		}
 		public override void Render()
 		{
-			material.color = Color.Lerp(material.color, Color.blue, Time.deltaTime );
+			//material.color = Color.Lerp(material.color, Color.blue, Time.deltaTime );
 		}
 		public static void OnBallSpawned(Changed<Player> changed)
 		{
-			changed.Behaviour.material.color = Color.white;
+			//changed.Behaviour.material.color = Color.white;
 		}
 		private NetworkCharacterController _cc;
 		private Vector3 _forward;
@@ -121,6 +112,10 @@ namespace root {
 					}
 				}
 			}
+		}
+
+		private void FixedUpdate() {
+			_anim.SetFloat("Speed", _cc.Velocity.magnitude / _currentSpeed);
 		}
 	}
 }

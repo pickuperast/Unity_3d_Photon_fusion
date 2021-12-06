@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: -1101589486, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
+  _interpolationDataSource: 2
   _interpolationTarget: {fileID: 0}
   DetachInterpTarget: 0
   SyncParent: 1
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99fdf016fd397cc4c8e4dba0e1b4be36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
+  _interpolationDataSource: 2
   _currentSpeed: 3
   RotationSpeed: 3
   JumpForce: 2.5
@@ -200,7 +200,7 @@ MonoBehaviour:
     _value: 0.001
     _inverse: 999.99994
     _hash: -814817977
-  StateHashes: 0000000095b8e3cb09cf97bce5b951d641c14bf557001185de7d8954
+  StateHashes: 000000008a18fce4b9abd9d3
   TriggerHashes: 00000000
 --- !u!1 &8406894696477674497
 GameObject:
