@@ -10,6 +10,6 @@ namespace root {
         [SerializeField] private Player _player;
         private float maxSpeed = 5f;
 
-        void Update() => animator.SetFloat("speed", _player.Speed);
+        //void Update() => animator.SetFloat("speed", _player.Speed);
     }
 }

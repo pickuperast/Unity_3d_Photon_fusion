@@ -13,11 +13,8 @@ namespace root {
 		public float _currentSpeed = 3;
 		public float RotationSpeed = 3;
 		public float JumpForce = 2.5f;
-
-		[Networked] private float _speed { get; set; }
-		public float Speed => _speed;
 		
-		private Animator _anim;
+		[SerializeField] private Animator _anim;
 		
 		[SerializeField] private Ball _prefabBall;
 		[SerializeField] private PhysxBall _prefabPhysxBall;
@@ -38,7 +35,8 @@ namespace root {
 		private void Awake()
 		{
 			_cc = GetComponent<NetworkCharacterController>();
-			_anim = GetComponent<NetworkMecanimAnimator>().Animator;
+			if (_anim == null)
+				_anim = GetComponent<NetworkMecanimAnimator>().Animator;
 			_forward = transform.forward;
 		}
 		
@@ -74,9 +72,8 @@ namespace root {
 		{
 			if (GetInput(out NetworkInputData data)) {
 				data.direction.Normalize();
-				Debug.Log($"data.direction.Normalize(): {data.direction}; _speed: {_speed}");
-				_cc.Move(_currentSpeed*data.direction*Runner.DeltaTime);
-				_speed = _cc.Velocity.magnitude / _currentSpeed;
+				Debug.Log($"data.direction.Normalize(): {data.direction}; _speed: {_cc.Velocity.magnitude / _currentSpeed}");
+				_cc.Move(data.direction);//_currentSpeed * Runner.DeltaTime);
 
 				if (data.direction.sqrMagnitude > 0)
 					_forward = data.direction;
@@ -114,9 +111,9 @@ namespace root {
 			}
 		}
 
-		private void FixedUpdate() {
-			_anim.SetFloat("Speed", _cc.Velocity.magnitude / _currentSpeed);
-		}
+		// private void FixedUpdate() {
+		// 	_anim.SetFloat("Speed", _cc.Velocity.magnitude / _currentSpeed);
+		// }
 	}
 }
 

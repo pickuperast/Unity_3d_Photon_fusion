@@ -57,7 +57,6 @@ GameObject:
   - component: {fileID: 3356864704645261597}
   - component: {fileID: 3356864704645261596}
   - component: {fileID: 7870212103162751474}
-  - component: {fileID: 8759160577431865119}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -105,7 +104,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 3356864704645261596}
   - {fileID: 7870212103162751474}
-  - {fileID: 8759160577431865119}
+  - {fileID: 0}
   SimulationBehaviours: []
 --- !u!114 &3356864704645261596
 MonoBehaviour:
@@ -169,39 +168,11 @@ MonoBehaviour:
   _currentSpeed: 3
   RotationSpeed: 3
   JumpForce: 2.5
+  _anim: {fileID: 8406894696470396863}
   _prefabBall: {fileID: 7532498779934406039, guid: fd1d314acf7ef2e448f5bae476638297, type: 3}
   _prefabPhysxBall: {fileID: 8927873016123725431, guid: e673932f6b45bc74e8e6dd37dccec113, type: 3}
   _spawned:
     _value: 0
---- !u!114 &8759160577431865119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3356864704645261599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  Animator: {fileID: 8406894696470396863}
-  SyncSettings: 73
-  FloatAccuracy:
-    _value: 0.001
-    _inverse: 999.99994
-    _hash: -814817977
-  TimeAccuracy:
-    _value: 0.0001
-    _inverse: 10000
-    _hash: 1061325578
-  WeightAccuracy:
-    _value: 0.001
-    _inverse: 999.99994
-    _hash: -814817977
-  StateHashes: 000000008a18fce4b9abd9d3
-  TriggerHashes: 00000000
 --- !u!1 &8406894696477674497
 GameObject:
   m_ObjectHideFlags: 0
