@@ -104,7 +104,6 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 3356864704645261596}
   - {fileID: 7870212103162751474}
-  - {fileID: 0}
   SimulationBehaviours: []
 --- !u!114 &3356864704645261596
 MonoBehaviour:
@@ -119,7 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 2
-  _interpolationTarget: {fileID: 0}
+  _interpolationTarget: {fileID: 8406894696477839397}
   DetachInterpTarget: 0
   SyncParent: 1
   InterpolateErrorCorrection: 1
@@ -135,7 +134,7 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   SyncScale: 0
   Space: 0
-  _collider: {fileID: 0}
+  _collider: {fileID: 9104232051204932422}
   Config:
     AllowedPenetration: 0.1
     PenetrationCorrection: 0.5
@@ -165,7 +164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 2
-  _currentSpeed: 3
   RotationSpeed: 3
   JumpForce: 2.5
   _anim: {fileID: 8406894696470396863}
@@ -1869,6 +1867,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8406894696477839397}
   - component: {fileID: 8406894696470396863}
+  - component: {fileID: 71083686204247774}
   m_Layer: 0
   m_Name: WM_Master_Unity
   m_TagString: Untagged
@@ -1911,6 +1910,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &71083686204247774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8406894696477674951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f21327e7ac93f4d91dc319fda60661, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anim: {fileID: 0}
+  _player: {fileID: 0}
+  _cc: {fileID: 0}
 --- !u!1 &8406894696477674953
 GameObject:
   m_ObjectHideFlags: 0

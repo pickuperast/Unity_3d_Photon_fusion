@@ -6,11 +6,17 @@ using UnityEngine;
 using TMPro;
 
 namespace root {
-	public class Player : NetworkBehaviour
-	{
+	public class Player : NetworkBehaviour {
+
+		private float _currentSpeed = 3f;
+		public float MS => _currentSpeed;
 		
+		[Networked]
+		private Vector3 moveDirection { get; set; }
+
+		[Networked]
+		private Vector3 aimDirection { get; set; }
 		[Header("Movement Settings")]
-		public float _currentSpeed = 3;
 		public float RotationSpeed = 3;
 		public float JumpForce = 2.5f;
 		
@@ -21,10 +27,6 @@ namespace root {
 		[Networked] private TickTimer delay { get; set; }
 		[Networked(OnChanged = nameof(OnBallSpawned))]
 		public NetworkBool spawned { get; set; }
-		public override void Render()
-		{
-			//material.color = Color.Lerp(material.color, Color.blue, Time.deltaTime );
-		}
 		public static void OnBallSpawned(Changed<Player> changed)
 		{
 			//changed.Behaviour.material.color = Color.white;
@@ -39,6 +41,7 @@ namespace root {
 				_anim = GetComponent<NetworkMecanimAnimator>().Animator;
 			_forward = transform.forward;
 		}
+
 		
 		//As the RPC call is the actual networked message, there is no need to extend the input struct.
 		//Also, as RPCs are not tick aligned anyways, there is no need to use Fusions input handling,
@@ -72,7 +75,7 @@ namespace root {
 		{
 			if (GetInput(out NetworkInputData data)) {
 				data.direction.Normalize();
-				Debug.Log($"data.direction.Normalize(): {data.direction}; _speed: {_cc.Velocity.magnitude / _currentSpeed}");
+				//Debug.Log($"data.direction.Normalize(): {data.direction}; _speed: {_cc.Velocity.magnitude / _currentSpeed}");
 				_cc.Move(data.direction);//_currentSpeed * Runner.DeltaTime);
 
 				if (data.direction.sqrMagnitude > 0)
@@ -108,12 +111,33 @@ namespace root {
 						spawned = !spawned;
 					}
 				}
+				SetDirections(data.direction, data.direction);
 			}
 		}
-
-		// private void FixedUpdate() {
-		// 	_anim.SetFloat("Speed", _cc.Velocity.magnitude / _currentSpeed);
-		// }
+		
+		public void SetDirections(Vector3 moveDirection, Vector3 aimDirection)
+		{
+			this.moveDirection = moveDirection;
+			this.aimDirection = aimDirection;
+		}
+		/// <summary>
+		/// Render is the Fusion equivalent of Unity's Update() and unlike FixedUpdateNetwork which is very different from FixedUpdate,
+		/// Render is in fact exactly the same. It even uses the same Time.deltaTime time steps. The purpose of Render is that
+		/// it is always called *after* FixedUpdateNetwork - so to be safe you should use Render over Update if you're on a
+		/// SimulationBehaviour.
+		///
+		/// Here, we use Render to update visual aspects of the Tank that does not involve changing of networked properties.
+		/// </summary>
+		public override void Render()
+		{
+			// Add a little visual-only movement to the mesh
+			SetMeshOrientation();
+		}
+		private void SetMeshOrientation()
+		{
+			if (moveDirection.magnitude > 0.1f)
+				_cc.transform.forward = Vector3.Lerp(_cc.transform.forward, moveDirection, Time.deltaTime * 20f);
+		}
 	}
 }
 
