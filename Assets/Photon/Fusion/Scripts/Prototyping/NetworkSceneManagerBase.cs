@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 namespace Fusion {
  
 
-  public abstract class NetworkSceneManagerBase : MonoBehaviour, INetworkSceneObjectProvider {
+  public abstract class NetworkSceneManagerBase : Fusion.Behaviour, INetworkSceneObjectProvider {
 
     private static WeakReference<NetworkSceneManagerBase> s_currentlyLoading = new WeakReference<NetworkSceneManagerBase>(null);
 
@@ -56,7 +56,7 @@ namespace Fusion {
       if (s_currentlyLoading.TryGetTarget(out var target)) {
         Assert.Check(target != this);
         if (!target) {
-          LogWarn("");
+          // orphaned loader?
           s_currentlyLoading.SetTarget(null);
         } else {
           LogTrace($"Waiting for {target} to finish loading");
@@ -105,12 +105,14 @@ namespace Fusion {
       // get all root gameobjects and move them to this runners scene
       foreach (var go in gameObjects) {
         networkObjects.Clear();
-        go.GetComponentsInChildren(networkObjects);
+        go.GetComponentsInChildren(true, networkObjects);
 
         foreach (var sceneObject in networkObjects) {
-          if (sceneObject.Flags.IsSceneObject() && sceneObject.gameObject.activeInHierarchy) {
-            Assert.Check(sceneObject.NetworkGuid.IsValid);
-            result.Add(sceneObject);
+          if (sceneObject.Flags.IsSceneObject()) {
+            if (sceneObject.gameObject.activeInHierarchy || sceneObject.Flags.IsActivatedByUser()) {
+              Assert.Check(sceneObject.NetworkGuid.IsValid);
+              result.Add(sceneObject);
+            }
           }
         }
 
@@ -121,10 +123,9 @@ namespace Fusion {
       }
 
       if (disable) {
+        // disable objects; each will be activated if there's a matching state object
         foreach (var sceneObject in result) {
-          if (sceneObject.gameObject.activeInHierarchy) {
-            sceneObject.gameObject.SetActive(false);
-          }
+          sceneObject.gameObject.SetActive(false);
         }
       }
 
@@ -170,7 +171,21 @@ namespace Fusion {
 
     protected virtual void Shutdown(NetworkRunner runner) {
       Assert.Check(Runner == runner);
-      Runner = null;
+
+      try {
+        // ongoing loading, dispose
+        if (_runningCoroutine != null) {
+          LogWarn($"There is an ongoing scene load ({_currentScene}), stopping and disposing coroutine.");
+          StopCoroutine(_runningCoroutine);
+          (_runningCoroutine as IDisposable)?.Dispose();
+        }
+      } finally {
+        Runner = null;
+        _runningCoroutine = null;
+        _currentScene = SceneRef.None;
+        _currentSceneOutdated = false;
+        _sceneObjects.Clear();
+      }
     }
 
     protected delegate void FinishedLoadingDelegate(IEnumerable<NetworkObject> sceneObjects);
@@ -258,24 +273,21 @@ namespace Fusion {
         return;
       }
 
-      if (Runner.MultiplePeerUnityScene.GetHashCode() != instanceId) {
-        return;
-      }
+      if (Runner.MultiplePeerUnityScene.GetHashCode() == instanceId) {
 
-      var rect = new Rect(position) { 
-        xMin = position.xMax - 50, 
-        xMax = position.xMax - 2,
-        yMin = position.yMin + 1,
-        //yMax = position.yMax - 2.25f 
-      };
+        var rect = new Rect(position) {
+          xMin = position.xMax - 56,
+          xMax = position.xMax - 2,
+          yMin = position.yMin + 1,
+        };
 
-      if (GUI.Button(rect, Runner.name, s_hierarchyOverlayLabelStyle.Value)) {
-        if (Runner) {
+        if (GUI.Button(rect, $"{Runner.Mode} {(Runner.LocalPlayer.IsValid ? "P" + Runner.LocalPlayer.PlayerId.ToString() : "")}", s_hierarchyOverlayLabelStyle.Value)) {
           UnityEditor.EditorGUIUtility.PingObject(Runner);
           UnityEditor.Selection.activeGameObject = Runner.gameObject;
         }
       }
     }
+
 #endif
   }
 }

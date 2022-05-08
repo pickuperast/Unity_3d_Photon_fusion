@@ -14,6 +14,11 @@
             
             This will deal with all communication done with the Photon Cloud
             </summary>
+            <summary>
+            Fusion Realtime Client
+            
+            This will deal with all communication done with the Photon Cloud
+            </summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.FusionRelayClient.KeepAliveInBackground">
             <summary>Defines for how long the Fallback Thread should keep the connection, before it may time out as usual.</summary>
@@ -58,21 +63,6 @@
             </summary>
             <returns>True if the Thread should keep running, false otherwise.</returns>
         </member>
-        <member name="F:Fusion.Photon.Realtime.FusionRelayClient.FUSION_PLUGIN_NAME">
-            <summary>
-            Fusion Plugin Name for request
-            </summary>
-        </member>
-        <member name="P:Fusion.Photon.Realtime.FusionRelayClient.IsReadyAndInRoom">
-            <summary>
-            Flag to signal if the Client is Ready to perform cloud action and it is in a Room
-            </summary>
-        </member>
-        <member name="E:Fusion.Photon.Realtime.FusionRelayClient.OnRoomPropertiesChanged">
-            <summary>
-            Signal if some room property has changed
-            </summary>
-        </member>
         <member name="M:Fusion.Photon.Realtime.FusionRelayClient.OnEventHandler(ExitGames.Client.Photon.EventData)">
             <summary>
             Handles all received events from the Photon Cloud
@@ -90,7 +80,7 @@
             <param name="reliable">Flag to set reliability on the Event</param>
             <returns>True if the event was sent, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.ExtractData(System.Object,System.Byte*,System.Int32@)">
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.ExtractData(System.Object,System.Byte[],System.Int32@)">
             <summary>
             Utility method used to extract the content of a <see cref="T:ExitGames.Client.Photon.ByteArraySlice"/> from a object holder.
             This is necessary so there are no references of Photon Lib DLLs other than on the Fusion.Realtime project
@@ -100,7 +90,27 @@
             <param name="bufferLength">Output size of the written buffer</param>
             <returns>True if the extraction was done correctly, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.UpdateRoomProperties(System.Collections.Generic.Dictionary{System.String,System.Int32})">
+        <member name="F:Fusion.Photon.Realtime.FusionRelayClient.FUSION_PLUGIN_NAME">
+            <summary>
+            Fusion Plugin Name for request
+            </summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.FusionRelayClient.SERVER_HOST_CN">
+            <summary>
+            Alternative Name Server for CN Region
+            </summary>
+        </member>
+        <member name="P:Fusion.Photon.Realtime.FusionRelayClient.IsReadyAndInRoom">
+            <summary>
+            Flag to signal if the Client is Ready to perform cloud action and it is in a Room
+            </summary>
+        </member>
+        <member name="E:Fusion.Photon.Realtime.FusionRelayClient.OnRoomPropertiesChanged">
+            <summary>
+            Signal if some room property has changed
+            </summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.UpdateRoomProperties(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
             <summary>
             Change the Custom Properties of the current Room
             </summary>
@@ -132,7 +142,7 @@
             Used to keep the client communication
             </summary>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildEnterRoomParams(Fusion.Photon.Realtime.TypedLobby,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.Int32})">
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildEnterRoomParams(Fusion.Photon.Realtime.TypedLobby,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
             <summary>
             Build a new EnterRoomParams ref using the default configs and optional Room Name
             </summary>
@@ -140,6 +150,23 @@
             <param name="RoomName">Room Name, if not set, a Random Name will be used</param>
             <param name="customProperties">Optional Room Custom Properties</param>
             <returns>EnterRoomParams reference.</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildJoinParams(Fusion.Photon.Realtime.TypedLobby,System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
+            <summary>
+            Build a new OpJoinRandomRoomParams that will be used to setup which Room the local peer wants to join
+            </summary>
+            <param name="typedLobby">Type of Lobby to search rooms</param>
+            <param name="customProperties">Optional list of filter parameters</param>
+            <returns>OpJoinRandomRoomParams reference</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildSessionCustomPropertyHolders(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty},ExitGames.Client.Photon.Hashtable@,System.String[]@)">
+            <summary>
+            Convert a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> into a pair of <see cref="T:ExitGames.Client.Photon.Hashtable"/> and <see cref="!:string[]"/> respectively 
+            representing the custom properties of a session and the property names that will be published on the Lobby
+            </summary>
+            <param name="customProperties">Dictionary to be converted</param>
+            <param name="sessionCustomProperties">Hashtable with all allowed Custom Properties</param>
+            <param name="publicSessionProperties">String array with all public key names</param>
         </member>
         <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.ConnectToMasterAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.AppSettings,System.Boolean)">
             <summary>
@@ -271,6 +298,37 @@
             <param name="client">Client</param>
             <param name="token">Cancellation token to stop the update loop</param>
             <param name="completionSource">Completion source is notified on an exception in Service()</param>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_Hashtable.ConvertToDictionaryProperty(ExitGames.Client.Photon.Hashtable)">
+            <summary>
+            Convert a <see cref="T:ExitGames.Client.Photon.Hashtable"/> into a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/>
+            </summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_Hashtable.ConvertToHashtable(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
+            <summary>
+            Convert a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> into a <see cref="T:ExitGames.Client.Photon.Hashtable"/>
+            </summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_Hashtable.CalculateTotalSize(ExitGames.Client.Photon.Hashtable)">
+            <summary>
+            Calculate the total size a <see cref="T:ExitGames.Client.Photon.Hashtable"/> would take when serialized
+            </summary>
+            <param name="hashtable">Hashtable to check the size</param>
+            <returns>Total size of the Hashtable in serialized format</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_RoomInfo.GetCustomProperties(Fusion.Photon.Realtime.RoomInfo)">
+            <summary>
+            Convert the Room Custom Properties into a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/>
+            </summary>
+            <param name="roomInfo">RoomInfo to extract the custom properties</param>
+            <returns><see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> with the data</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_DictionaryProperties.CalculateTotalSize(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
+            <summary>
+            Calculate the total size a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> would take when serialized
+            </summary>
+            <param name="dictionary">Dictionary to check the size</param>
+            <returns>Total size of the Dictionary in serialized format</returns>
         </member>
         <member name="T:Fusion.Photon.Realtime.AppSettings">
             <summary>
@@ -1798,11 +1856,18 @@
             </remarks>
         </member>
         <member name="M:Fusion.Photon.Realtime.IConnectionCallbacks.OnRegionListReceived(Fusion.Photon.Realtime.RegionHandler)">
-            <summary>
-            Called when the Name Server provided a list of regions for your title.
-            </summary>
-            <remarks>Check the RegionHandler class description, to make use of the provided values.</remarks>
-            <param name="regionHandler">The currently used RegionHandler.</param>
+             <summary>
+             Called when the Name Server provided a list of regions for your title.
+             </summary>
+             <remarks>
+             This callback is called as soon as the list is available. No pings were sent for Best Region selection yet.
+             If the client is set to connect to the Best Region (lowest ping), one or more regions get pinged.
+             Not all regions are pinged. As soon as the results are final, the client will connect to the best region,
+             so you can check the ping results when connected to the Master Server.
+            
+             Check the RegionHandler class description, to make use of the provided values.
+             </remarks>
+             <param name="regionHandler">The currently used RegionHandler.</param>
         </member>
         <member name="M:Fusion.Photon.Realtime.IConnectionCallbacks.OnCustomAuthenticationResponse(System.Collections.Generic.Dictionary{System.String,System.Object})">
              <summary>
@@ -2032,14 +2097,20 @@
              </remarks>
         </member>
         <member name="M:Fusion.Photon.Realtime.IInRoomCallbacks.OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable)">
-            <summary>
-            Called when a room's custom properties changed. The propertiesThatChanged contains all that was set via Room.SetCustomProperties.
-            </summary>
-            <remarks>
-            Since v1.25 this method has one parameter: Hashtable propertiesThatChanged.<br/>
-            Changing properties must be done by Room.SetCustomProperties, which causes this callback locally, too.
-            </remarks>
-            <param name="propertiesThatChanged"></param>
+             <summary>
+             Called when room properties changed. The propertiesThatChanged contain only the keys that changed.
+             </summary>
+             <remarks>
+             In most cases, this method gets called due to some player settings Room Properties.
+             However, there are also "Well Known Properties", which use byte keys and this callback may include them.
+             Especially when entering a room, the server will also send the required Well Known Properties and those
+             are not filtered out before Realtime calls OnRoomPropertiesUpdate.
+            
+             You can safely ignore the byte typed keys in propertiesThatChanged.
+             
+             Changing properties is usually done by Room.SetCustomProperties.
+             </remarks>
+             <param name="propertiesThatChanged"></param>
         </member>
         <member name="M:Fusion.Photon.Realtime.IInRoomCallbacks.OnPlayerPropertiesUpdate(Fusion.Photon.Realtime.Player,ExitGames.Client.Photon.Hashtable)">
             <summary>
@@ -2624,7 +2695,7 @@
             <summary>(32758) Join can fail if the room (name) is not existing (anymore). This can happen when players leave while you join.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.ErrorCode.MaxCcuReached">
-             <summary>(32757) Authorization on the Photon Cloud failed becaus the concurrent users (CCU) limit of the app's subscription is reached.</summary>
+             <summary>(32757) Authorization on the Photon Cloud failed because the concurrent users (CCU) limit of the app's subscription is reached.</summary>
              <remarks>
              Unless you have a plan with "CCU Burst", clients might fail the authentication step during connect.
              Affected client are unable to call operations. Please note that players who end a game and return
@@ -2692,7 +2763,7 @@
         </member>
         <member name="F:Fusion.Photon.Realtime.ErrorCode.HttpLimitReached">
             <summary>
-            (32745)  for SetProerties and Raisevent (if flag HttpForward is true) requests. Indicates the maximum allowd http requests per minute was reached.
+            (32745)  for SetProperties and RaiseEvent (if flag HttpForward is true) requests. Indicates the maximum allowed http requests per minute was reached.
             </summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.ErrorCode.ExternalHttpCallFailed">
@@ -3455,28 +3526,34 @@
             <summary>Use a custom authentication service. Currently the only implemented option.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.Steam">
-            <summary>Authenticates users by their Steam Account. Set auth values accordingly!</summary>
+            <summary>Authenticates users by their Steam Account. Set Steam's ticket as "ticket" via AddAuthParameter().</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.Facebook">
-            <summary>Authenticates users by their Facebook Account. Set auth values accordingly!</summary>
+            <summary>Authenticates users by their Facebook Account.  Set Facebooks's tocken as "token" via AddAuthParameter().</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.Oculus">
-            <summary>Authenticates users by their Oculus Account and token.</summary>
+            <summary>Authenticates users by their Oculus Account and token. Set Oculus' userid as "userid" and nonce as "nonce" via AddAuthParameter().</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.PlayStation4">
-            <summary>Authenticates users by their PSN Account and token on PS4.</summary>
+            <summary>Authenticates users by their PSN Account and token on PS4. Set token as "token", env as "env" and userName as "userName" via AddAuthParameter().</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.Xbox">
-            <summary>Authenticates users by their Xbox Account and XSTS token.</summary>
+            <summary>Authenticates users by their Xbox Account. Pass the XSTS token via SetAuthPostData().</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.Viveport">
-            <summary>Authenticates users by their HTC Viveport Account and user token. Set AuthGetParameters to "userToken=[userToken]"</summary>
+            <summary>Authenticates users by their HTC Viveport Account. Set userToken as "userToken" via AddAuthParameter().</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.NintendoSwitch">
-            <summary>Authenticates users by their NSA ID.</summary>
+            <summary>Authenticates users by their NSA ID. Set token  as "token" and appversion as "appversion" via AddAuthParameter(). The appversion is optional.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.PlayStation5">
-            <summary>Authenticates users by their PSN Account and token on PS5.</summary>
+            <summary>Authenticates users by their PSN Account and token on PS5. Set token as "token", env as "env" and userName as "userName" via AddAuthParameter().</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.Epic">
+            <summary>Authenticates users with Epic Online Services (EOS). Set token as "token" and ownershipToken as "ownershipToken" via AddAuthParameter(). The ownershipToken is optional.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.FacebookGaming">
+            <summary>Authenticates users with Facebook Gaming api. Set token as "token" via AddAuthParameter().</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.CustomAuthenticationType.None">
             <summary>Disables custom authentication. Same as not providing any AuthenticationValues for connect (more precisely for: OpAuthenticate).</summary>
@@ -3788,10 +3865,13 @@
              </summary>
              <remarks>
              When a client uses a Name Server to fetch the list of available regions, the LoadBalancingClient will create a RegionHandler
-             and provide it via the OnRegionListReceived callback.
+             and provide it via the OnRegionListReceived callback, as soon as the list is available. No pings were sent for Best Region selection yet.
             
              Your logic can decide to either connect to one of those regional servers, or it may use PingMinimumOfRegions to test
-             which region provides the best ping.
+             which region provides the best ping. Alternatively the client may be set to connect to the Best Region (lowest ping), one or
+             more regions get pinged.
+             Not all regions will be pinged. As soon as the results are final, the client will connect to the best region,
+             so you can check the ping results when connected to the Master Server.
             
              It makes sense to make clients "sticky" to a region when one gets selected.
              This can be achieved by storing the SummaryToCache value, once pinging was done.
@@ -4362,6 +4442,66 @@
         </member>
         <member name="P:Fusion.Photon.Realtime.PhotonAppSettings.Instance">
             <summary>Serialized server settings, written by the Setup Wizard for use in ConnectUsingSettings.</summary>
+        </member>
+        <member name="T:Fusion.SessionProperty">
+            <summary>
+            Holds a Custom Session Property value
+            </summary>
+        </member>
+        <member name="P:Fusion.SessionProperty.PropertyValue">
+            <summary>
+            Internal stored value 
+            </summary>
+        </member>
+        <member name="P:Fusion.SessionProperty.PropertyType">
+            <summary>
+            Get the Type of the internal stored value 
+            </summary>
+        </member>
+        <member name="P:Fusion.SessionProperty.IsInt">
+            <summary>
+            Signal if this Session Property is a int value
+            </summary>
+        </member>
+        <member name="P:Fusion.SessionProperty.IsString">
+            <summary>
+            Signal if this Session Property is a string value
+            </summary>
+        </member>
+        <member name="M:Fusion.SessionProperty.op_Implicit(Fusion.SessionProperty)~System.Int32">
+            <summary>
+            Convert a <see cref="T:Fusion.SessionProperty"/> into int
+            </summary>
+        </member>
+        <member name="M:Fusion.SessionProperty.op_Implicit(System.Int32)~Fusion.SessionProperty">
+            <summary>
+            Convert a int into a <see cref="T:Fusion.SessionProperty"/>
+            </summary>
+        </member>
+        <member name="M:Fusion.SessionProperty.op_Implicit(Fusion.SessionProperty)~System.String">
+            <summary>
+            Convert a <see cref="T:Fusion.SessionProperty"/> into string
+            </summary>
+        </member>
+        <member name="M:Fusion.SessionProperty.op_Implicit(System.String)~Fusion.SessionProperty">
+            <summary>
+            Convert a string into a <see cref="T:Fusion.SessionProperty"/>
+            </summary>
+        </member>
+        <member name="M:Fusion.SessionProperty.Support(System.Object)">
+            <summary>
+            Signal if a particular object is supported as a <see cref="T:Fusion.SessionProperty"/>
+            </summary>
+            <param name="obj">Object ref to check</param>
+            <returns>True if obj is of a supported type, false otherwise</returns>
+        </member>
+        <member name="M:Fusion.SessionProperty.Convert(System.Object)">
+            <summary>
+            Convert a particular object into a <see cref="T:Fusion.SessionProperty"/>.
+            If the object type is not supported, null will be returned.
+            </summary>
+            <param name="obj">Object reference to be converted</param>
+            <returns>Instance of a <see cref="T:Fusion.SessionProperty"/> if type is supported, null otherwise</returns>
         </member>
     </members>
 </doc>
